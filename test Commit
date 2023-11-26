@@ -6,7 +6,9 @@ pipeline {
             steps {
                 script {
                     echo """
-                    I'm so grateful now that abundance comes to me easily and effortlessly on a consistent and every day basis.
+                    I'm so grateful now that abundance comes to me and my family so easily and effortlessly on a consistent and every day basis.
+                    sleep time: 20, unit: 'SECONDS'
+                    "Je suis tres reconnaissant maintenant que l'abondance m'arrive facilement sans effort de maniere coherante et quotidienne"
                     """
                     sleep time: 20, unit: 'SECONDS'
                     sh 'java -version'
