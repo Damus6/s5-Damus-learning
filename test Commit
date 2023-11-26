@@ -1,0 +1,8 @@
+echo "
+I'm so grateful now that abundand comes to me easily and effortlessly on a consistant and every day basis."
+sleep 20
+systemctl java -version
+java -version
+systemctl start jenkins
+systemctl enable jenkins
+systemctl status jenkins
