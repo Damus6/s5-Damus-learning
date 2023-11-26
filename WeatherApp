@@ -1,0 +1,61 @@
+#WeatherApp
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_COMPOSE_VERSION = '1.29.2'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build and Push Docker Images') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.example.com', 'docker-credentials') {
+                        // Build and push the UI image
+                        docker.image('devopseasylearning2021/s4-ui:4649').push()
+
+                        // Build and push the Auth image
+                        docker.image('devopseasylearning2021/s4-auth:4649').push()
+
+                        // Build and push the Weather image
+                        docker.image('devopseasylearning2021/s4-weather:4649').push()
+
+                        // Build and push the DB image
+                        docker.image('devopseasylearning2021/s4-db:4649').push()
+
+                        // Build and push the Redis image
+                        docker.image('devopseasylearning2021/s4-redis:4649').push()
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Services') {
+            steps {
+                script {
+                    // Install Docker Compose
+                    sh "curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose"
+                    sh 'chmod +x /usr/local/bin/docker-compose'
+
+                    // Deploy services using Docker Compose
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up Docker Compose after the deployment
+            script {
+                sh 'docker-compose down'
+            }
+        }
+    }
+}
